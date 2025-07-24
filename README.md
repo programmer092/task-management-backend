@@ -1,6 +1,6 @@
 # Task Management Backend
 
-This project is the backend for a task management application inspired by tools like Jira. It provides users with a board featuring three columns: **Todo**, **In Progress**, and **Completed**. The API is built using **TypeScript**, **NestJs** and **TypeORM**, and utilizes a **PostgreSQL** database for data persistence.
+This project is the backend for a task management application inspired by tools like Jira/Trello. It provides users with a board featuring three columns: **Todo**, **In Progress**, and **Completed**. The API is built using **TypeScript**, **NestJs** and **TypeORM**, and utilizes a **PostgreSQL** database for data persistence.
 
 ---
 
@@ -40,11 +40,11 @@ This project is the backend for a task management application inspired by tools 
    Create a `.env` file in the root directory and add your PostgreSQL connection details (example below):
 
    ```env
-   DB_HOST=localhost
-   DB_PORT=5432
-   DB_USER=your_postgres_user
-   DB_PASSWORD=your_postgres_password
-   DB_NAME=task_management
+   DATABASE_HOST=localhost
+   DATABASE_PORT=5432
+   DATABASE_USER=your_postgres_user
+   DATABASE_PASSWORD=your_postgres_password
+   DATABASE_NAME=taskmanagement
    JWT_SECRET=your_jwt_secret_key
    JWT_REFRESH_SECRET=your_jwt_refresh_secret_key
    JWT_EXPIRES_IN=1d
@@ -133,8 +133,8 @@ The server will start and listen for requests on port 3000 or on different port 
     "title": "string",
     "description": "string",
     "status": "Todo | In Progress | Completed",
-    "priority": "low | medium | high",
-    "deadline": "string"
+    "priority": "Low | Medium | High",
+    "deadline": "Date"
   }
   ```
 - **Response:** Created task object.
@@ -156,9 +156,9 @@ The server will start and listen for requests on port 3000 or on different port 
   {
     "title": "string", // optional
     "description": "string", // optional
-    "status": "todo | in-progress | completed", // optional
-    "priority": "low | medium | high" // optional
-    "deadline": "string" //optional
+    "status": "Todo | In Progress | Completed", // optional
+    "priority": "Low | Medium | High" // optional
+    "deadline": "Date" //optional
   }
   ```
 - **Response:** Updated task object.
@@ -184,14 +184,14 @@ The server will start and listen for requests on port 3000 or on different port 
 ## Folder Structure
 
 - `/src`: Main backend source code
-- `/src/migration`: TypeORM migration scripts
+- `/src/migrations`: TypeORM migrations
 - `/src/utils/helper/create-db.ts`: Database creation utility
 
 ---
 
 **Note:**  
 - All `/task` endpoints require authentication via JWT.
-- All API endpoints are prefixed with `/api`. For example, your authentication endpoint is: `http://localhost:300/api/auth/login`
+- All API endpoints are prefixed with `/api`. For example, your authentication endpoint is: `http://localhost:3000/api/auth/login`
 - Task operations are scoped to the authenticated user.
 - For more controllers or endpoints, view your project’s [GitHub code search results](https://github.com/programmer092/task-management-backend/search?q=controller).
 
