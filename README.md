@@ -1,98 +1,198 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Task Management Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This project is the backend for a task management application inspired by tools like Jira. It provides users with a board featuring three columns: **Todo**, **In Progress**, and **Completed**. The API is built using **TypeScript**, **NestJs** and **TypeORM**, and utilizes a **PostgreSQL** database for data persistence.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Features
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- User-friendly task management (board view)
+- Task lifecycle: Todo → In Progress → Completed
+- RESTful API endpoints
+- Database migrations for easy setup and updates
+- Built with TypeScript and TypeORM
 
-## Project setup
+---
 
+## Getting Started
+
+### Prerequisites
+
+- Node.js
+- npm
+- PostgreSQL
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/programmer092/task-management-backend.git
+   cd task-management-backend
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment Variables:**
+
+   Create a `.env` file in the root directory and add your PostgreSQL connection details (example below):
+
+   ```env
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_USER=your_postgres_user
+   DB_PASSWORD=your_postgres_password
+   DB_NAME=task_management
+   JWT_SECRET=your_jwt_secret_key
+   JWT_REFRESH_SECRET=your_jwt_refresh_secret_key
+   JWT_EXPIRES_IN=1d
+   JWT_REFRESH_EXPIRES_IN=7d
+   ```
+
+### Database Setup
+
+1. **Create the PostgreSQL Database:**  
+   Run the script to create the database.
+   ```bash
+   npm run database:create
+   ```
+
+2. **Run Migrations:**  
+   Apply the latest database migrations.
+   ```bash
+   npm run migration:up
+   ```
+
+### Running the Server
+
+Start the backend server:
 ```bash
-$ npm install
+npm start
 ```
+The server will start and listen for requests on port 3000 or on different port if specified through configuration.
 
-## Compile and run the project
+---
 
-```bash
-# development
-$ npm run start
+## Tech Stack
 
-# watch mode
-$ npm run start:dev
+- **TypeScript** for strong typing and modern JS features
+- **TypeORM** for database management and migrations
+- **PostgreSQL** as the database
+- **NestJS**
 
-# production mode
-$ npm run start:prod
-```
+---
 
-## Run tests
+## API Documentation
 
-```bash
-# unit tests
-$ npm run test
+### Authentication
 
-# e2e tests
-$ npm run test:e2e
+**Base Route:** `/auth`
 
-# test coverage
-$ npm run test:cov
-```
+#### Register
+- **POST** `/auth/register`
+- **Body:**  
+  ```json
+  {
+    "fullName": "string",
+    "password": "string",
+    "email": "string"
+  }
+  ```
+- **Response:** User registration result.
 
-## Deployment
+#### Login
+- **POST** `/auth/login`
+- **Body:**  
+  ```json
+  {
+    "email": "string",
+    "password": "string"
+  }
+  ```
+- **Response:** Access and refresh tokens.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+#### Refresh Access Token
+- **POST** `/auth/refresh-access-token`
+- **Authentication:** Requires RefreshTokenGuard.
+- **Response:** New access token.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+---
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+### Task Management
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+**Base Route:** `/task`  
+*Requires JWT Authentication.*
 
-## Resources
+#### Create Task
+- **POST** `/task/create`
+- **Body:**  
+  ```json
+  {
+    "title": "string",
+    "description": "string",
+    "status": "Todo | In Progress | Completed",
+    "priority": "low | medium | high",
+    "deadline": "string"
+  }
+  ```
+- **Response:** Created task object.
 
-Check out a few resources that may come in handy when working with NestJS:
+#### Get All Tasks
+- **GET** `/task`
+- **Response:** Array of user's tasks.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+#### Get Task by ID
+- **GET** `/task/:id`
+- **Params:**  
+  - `id`: Task ID
+- **Response:** Task object.
 
-## Support
+#### Update Task
+- **PATCH** `/task/:id`
+- **Body:**  
+  ```json
+  {
+    "title": "string", // optional
+    "description": "string", // optional
+    "status": "todo | in-progress | completed", // optional
+    "priority": "low | medium | high" // optional
+    "deadline": "string" //optional
+  }
+  ```
+- **Response:** Updated task object.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+#### Delete Task
+- **DELETE** `/task/:id`
+- **Response:** Deletion result.
 
-## Stay in touch
+#### Get Tasks by Status
+- **GET** `/task/status/:status`
+- **Params:**  
+  - `status`: Task status
+- **Response:** Tasks with specified status.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+#### Get Tasks by Priority
+- **GET** `/task/priority/:priority`
+- **Params:**  
+  - `priority`: Task priority
+- **Response:** Tasks with specified priority.
 
-## License
+---
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## Folder Structure
+
+- `/src`: Main backend source code
+- `/src/migration`: TypeORM migration scripts
+- `/src/utils/helper/create-db.ts`: Database creation utility
+
+---
+
+**Note:**  
+- All `/task` endpoints require authentication via JWT.
+- All API endpoints are prefixed with `/api`. For example, your authentication endpoint is: `http://localhost:300/api/auth/login`
+- Task operations are scoped to the authenticated user.
+- For more controllers or endpoints, view your project’s [GitHub code search results](https://github.com/programmer092/task-management-backend/search?q=controller).
+
+  
